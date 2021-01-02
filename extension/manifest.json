@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "PGP for WhatsApp",
+  "description": "Send messages over WhatsApp using PGP to add a second layer of End-to-End encryption.",
+  "version": "0.1.4",
+  "permissions": ["storage"],
+  "background": {
+    "scripts": ["js/utils.js","js/standfordEncryption.js","js/openpgp.min.js","js/jquery.min.js","js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+     {
+        "matches": ["https://*.whatsapp.com/*"],
+        "js": ["js/utils.js","js/openpgp.min.js","js/content.js"],
+        "css":["css/fonts.css","css/main.css"]
+    }
+    ],"icons": {
+        "512": "icon512.png",
+        "128": "wete-128.png"
+    },
+    "web_accessible_resources": [
+        "pages/*.html",
+        "manage/*",
+        "js/*",
+        "fonts/*"
+    ]
+}

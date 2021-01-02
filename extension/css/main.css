@@ -1,0 +1,174 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Overpass+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap'); */
+
+:root{
+    --pgp-red:#c75757;
+    --pgp-red-dark:#ad4141;
+
+    --pgp-yellow:#fed859;
+    --pgp-yellow-dark:#ecbf28;
+}
+
+#pgp-core-ui {
+    min-height:50px;
+    background:var(--pgp-red);
+    color:white;
+    z-index: 200;
+
+    font-family: 'Montserrat', sans-serif !important;
+
+    box-shadow: 0px 1px 1px #75757585;
+}
+
+
+    div.pgp-page {
+        display:flex;
+    }
+
+        .primary{
+            flex:1;
+        }
+
+        div.pgp-page div.panel {
+            margin:4px;
+            padding:3px;
+            border-radius:2px;
+
+        }
+
+        div.pgp-page div.panel:not(:first-child){
+            margin-left:0;
+        }
+
+        div.pgp-page div.panel.panel-highlight {
+            background:var(--pgp-red-dark);
+            width:25%;
+            text-align: center;
+        }
+
+            div.pgp-page div.panel div:not(:last-child) {
+                margin-bottom:3px;
+            }
+
+            div.pgp-page div.contact {
+                background: #c75757;
+                border-radius: 3px;
+                padding: 3px;
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+
+            div.pgp-page div.options {
+                display:flex;
+            }
+
+                div.pgp-page a.pgp-action {
+                    cursor:pointer;
+                    background:var(--pgp-yellow);
+                    font-size: 12px;
+                    padding: 5px 10px;
+                    border-radius:3px;
+                    color:black;
+                    display:block;
+                }
+
+                div.pgp-page a.pgp-action:not(:first-child) {
+                    margin-top:2px;
+                }
+
+                div.pgp-page a.pgp-action:hover {
+                    background:var(--pgp-yellow-dark);
+                }
+
+            div.pgp-group-error {
+                color:white;
+                padding: 5px;
+                font-size: 14px;
+                padding-bottom: 8px;
+            }
+
+
+/* === Modified Messages === */
+
+.pgp-modified ._7M8i6 {
+    background:var(--pgp-red) !important;
+    color:white !important;
+}
+
+.pgp-modified.pgp-modified-control ._7M8i6 {
+    background:var(--pgp-red-dark) !important;
+}
+
+
+.pgp-modified span[data-testid=tail-in], .pgp-modified span[data-testid=tail-out]{
+    color:var(--pgp-red);
+}
+
+.pgp-modified.pgp-modified-control span[data-testid=tail-in], .pgp-modified.pgp-modified-control span[data-testid=tail-out]{
+    color:var(--pgp-red-dark);
+}
+
+    .pgp-modified.pgp-modified-control .pgp-control-text {
+        font-style: italic;
+    }
+
+    .pgp-modified ._1VzZY span {
+        white-space: normal;
+    }
+
+
+    .pgp-modified .pgp-action {
+        color:white;
+        text-decoration: underline;
+        margin-right:10px;
+        cursor:pointer;
+    }
+
+.pgp-modified .sig {
+    background:var(--pgp-red-dark);
+    padding:2px 10px;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.pgp-modified .pgp-message {
+    margin-top:5px;
+}
+
+.mono {
+    font-family: 'Overpass Mono', monospace;
+    font-size: 12px;
+}
+
+
+
+/* .pgp-modified div.N7Dyd.kA6WR {
+    background:var(--pgp-red) !important;
+} */
+
+
+/* === SEND BUTTON === */
+
+div.pgp-encrypt-action {
+    display:flex;
+    justify-content: space-around;
+    flex-direction: column;
+    height:52px;
+    padding:0 10px;
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+    div.pgp-encrypt-action a.action-encrypt {
+        background:var(--pgp-yellow);
+        padding:8px;
+        border-radius: 15px;
+        color:black;
+        font-size:22px;
+        box-shadow: 0px 0px 5px #737373;
+        cursor:pointer;
+    }
+
+    div.pgp-encrypt-action a.action-encrypt:hover {
+        background:var(--pgp-yellow-dark);
+    }

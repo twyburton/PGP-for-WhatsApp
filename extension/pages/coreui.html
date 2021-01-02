@@ -1,0 +1,32 @@
+<div>
+    <div id="pgp-main" class="pgp-page">
+
+        <div class="panel panel-highlight">
+            <div class='contact'>Me</div>
+            <div class='mono' id='pgp-my-fingerprint'></div>
+            <div class='options'>
+                <a class='pgp-action' id='pgp-action-share-key'>Share&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16"><path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg></a>
+            </div>
+        </div>
+        <div class="panel panel-highlight">
+            <div class='contact'>Recipient</div>
+            <div id="profile-picture-warning" class=".hidden">Recipient must have a profile picture</div>
+            <div class='mono' id='pgp-recipient-fingerprint'></div>
+        </div>
+
+        <div class="panel primary"></div>
+
+        <div class="panel">
+            <a class='pgp-action pgp-action-full' target="_blank" id="action-manage-keys">Manage Keys<a>
+            <!--<a class='pgp-action pgp-action-full' id="action-encrypt-and-send">Encrypt and Send<a>-->
+        </div>
+    </div>
+
+    <div id="pgp-no-key" class="pgp-page" style="display:none;">
+        You have no key. Please Generate one.
+    </div>
+
+    <div id="pgp-group" class="pgp-page pgp-group-error" style="display:none;">
+        PGP for Whatsapp is not currently compatiable with groups
+    </div>
+</div>
