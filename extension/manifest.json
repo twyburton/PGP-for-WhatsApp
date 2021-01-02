@@ -16,7 +16,7 @@
     }
     ],"icons": {
         "512": "icon512.png",
-        "128": "wete-128.png"
+        "128": "icon128.png"
     },
     "web_accessible_resources": [
         "pages/*.html",
