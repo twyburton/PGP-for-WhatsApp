@@ -15,8 +15,8 @@
         "css":["css/fonts.css","css/main.css"]
     }
     ],"icons": {
-        "512": "icon512.png",
-        "128": "icon128.png"
+        "512": "pgp-512.png",
+        "128": "pgp-128.png"
     },
     "web_accessible_resources": [
         "pages/*.html",
