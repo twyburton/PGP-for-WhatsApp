@@ -6,3 +6,8 @@ Users must use https://web.whatsapp.com/ to make full use of the extension. Howe
 # Extension Requirements
 
 - The extension must not make calls to external endpoints.
+
+# Todo
+
+- Add background worker thread for crypto functions.
+- Refactor and fully document.
