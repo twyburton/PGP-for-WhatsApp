@@ -32,9 +32,13 @@ PAGE_DATA = {
                 </tr>
             </table>
 
-            <a class='action' id='action-save-key-settings'>Save Key Settings</a>
+            <a class='action' id='action-save-key-settings'>Save Key Settings</a> <span id='action-success-saved'></span>
 
          `,
+         postFunc: ()=>{
+            document.getElementById("key-settings-name-on-key").value = MY_CONTEXT.keySetting_nameOnKey;
+            document.getElementById("key-settings-my-identifier").value = MY_CONTEXT.keySetting_myIdentitifer;
+         },
          clickListeners: [
              {
                  id:"action-save-key-settings",
@@ -46,7 +50,9 @@ PAGE_DATA = {
                         MY_CONTEXT.keySetting_nameOnKey = nameOnKey;
                         MY_CONTEXT.keySetting_myIdentitifer = myIdentifier;
 
-                        saveMyContext();
+                        saveMyContext(()=>{
+                            document.getElementById("action-success-saved").innerHTML = `Saved <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>`;
+                        });
                     });
 
                  }
@@ -193,7 +199,7 @@ PAGE_DATA = {
                                         <td class='mono' id='key-${key.uuid}-fingerprint'></td>
                                         <td>${convertDate(new Date(key.created))}</td>
                                         <td>
-                                            <a class='action-mini' title='Edit key'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg></a>
+                                            <a id='key-${key.uuid}-action-edit' class='action-mini' title='Edit key'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg></a>
                                              <a id='key-${key.uuid}-action-clipboard' class='action-mini' title='Copy public key to clipboard'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16"><path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg></a>
                                         </td>
                                     </tr>
@@ -210,12 +216,60 @@ PAGE_DATA = {
                         copyToClipboard(key.pub);
                     });
 
-                    getPubFingerprint( key.pub , (fingerprint)=>{
+                    let fingerprint = null;
+                    let keyid = null;
+
+                    document.getElementById(`key-${key.uuid}-action-edit`).addEventListener("click",()=>{
+                        console.log(key);
+                        popupSetText(`
+                                <div class='segment'>Edit Key </div>
+
+                                <table class='key-value auto-size'>
+                                    <tr>
+                                        <td>Key ID</td>
+                                        <td><input type="text" value="${keyid}" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fingerprint</td>
+                                        <td><input type="text" value="${fingerprint}" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td><input type="text" id="popup-input-key-name" value="${key.name}"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Created</td>
+                                        <td>${key.created}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Saved</td>
+                                        <td>${key.saved}</td>
+                                    </tr>
+                                </table>
+
+                                <div class='segment'><a id='popup-update-key' class='action'>Save</a> <a id='popup-close' class='action'>Close</a></div>
+                            `);
+
+                        document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
+                        document.getElementById("popup-update-key").addEventListener("click",()=>{
+                            key.name = document.getElementById("popup-input-key-name").value;
+                            keychainSave( key );
+                            popupDisplay(false);
+                            selectPage("KEY_MANAGEMENT");
+                        });
+                        popupDisplay(true);
+                    });
+
+                    getPubFingerprint( key.pub , (fp)=>{
+                        fingerprint = fp;
                         let fpLocation = document.getElementById("key-" + key.uuid + "-fingerprint");
                         if( fpLocation ) fpLocation.innerHTML = fingerprint;
                     });
 
-                    getPubId( key.pub, (keyid)=>{
+                    getPubId( key.pub, (kid)=>{
+                        keyid = kid;
                         let idLocation = document.getElementById("key-" + key.uuid + "-id");
                         if( idLocation ) idLocation.innerHTML = keyid.toUpperCase();
                     });
@@ -417,8 +471,9 @@ function loadMyContext( callback ){
     });
 }
 
-function saveMyContext(){
+function saveMyContext( callback = null){
     chrome.storage.sync.set({myContext: MY_CONTEXT}, function() {
+        if( callback ) callback();
     });
 }
 
@@ -450,10 +505,21 @@ function keychainLoadFull( callback ){
     });
 }
 
+// ==== Popup Functions ====
+function popupDisplay( status ){
+    if( status ){
+        document.getElementById("popup-container").style.display = "flex";
+    } else {
+        document.getElementById("popup-container").style.display = "none";
+    }
+}
 
+function popupSetText( text ){
+    document.getElementById("popup").innerHTML = text;
+}
 
+// ==== Initalisation ====
 init();
-
 if( window.location.hash ){
     selectPage(window.location.hash.replace("#",""));
 } else {

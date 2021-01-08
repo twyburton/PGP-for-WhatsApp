@@ -11,6 +11,7 @@ body, html {
     padding:0;
     margin:0;
     font-family: 'Montserrat', sans-serif;
+    position:relative;
 }
 
     div.page {
@@ -83,7 +84,7 @@ body, html {
                     width:100%;
                 }
 
-                    table.key-value td {
+                    table.key-value:not(.auto-size) td {
                         width:50%;
                     }
 
@@ -133,6 +134,20 @@ body, html {
                 }
 
 
+                input {
+                    border-radius: 5px;
+                    padding:3px;
+                    border: 1px solid #c75757ab;
+                    background: #fbfbfb;
+                }
+
+                input[readonly] {
+                    cursor:not-allowed;
+                    background: #e4e4e4;
+                    color: #4c4c4c;
+                }
+
+
     div.footer {
 
         max-width:1000px;
@@ -141,3 +156,33 @@ body, html {
         padding:40px 0px;
 
     }
+
+
+    div.popup-container {
+        background:#00000054;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100vw;
+        height:100vh;
+        display: flex;
+        justify-content: space-around;
+    }
+
+        div.popup-container div.popup-container-inner {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+
+            div.popup-container div.popup{
+                background:white;
+                box-shadow: 0px 0px 6px #4c4c4c;
+                padding:10px;
+                min-width:400px;
+                min-height:300px;
+            }
+
+                div.popup-container div.popup div.segment{
+                    padding:1px 0;
+                }
