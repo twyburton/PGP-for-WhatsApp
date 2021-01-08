@@ -186,3 +186,8 @@ body, html {
                 div.popup-container div.popup div.segment{
                     padding:1px 0;
                 }
+
+                div.popup-container div.popup div.segment.popup-title{
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }

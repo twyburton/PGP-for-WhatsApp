@@ -220,9 +220,9 @@ PAGE_DATA = {
                     let keyid = null;
 
                     document.getElementById(`key-${key.uuid}-action-edit`).addEventListener("click",()=>{
-                        console.log(key);
+
                         popupSetText(`
-                                <div class='segment'>Edit Key </div>
+                                <div class='segment popup-title'>Edit Key</div>
 
                                 <table class='key-value auto-size'>
                                     <tr>
@@ -275,69 +275,6 @@ PAGE_DATA = {
                     });
 
                 });
-
-
-                // keys.sort((a,b)=>{
-                //     if( a.owner == b.owner ) return new Date(b.saved) - new Date(a.saved);
-                //     return b.owner - a.owner;
-                // });
-                //
-                // keys.forEach((key, i) => {
-                //
-                //     (async () => {
-                //
-                //         let str = "";
-                //
-                //
-                //         let openkey = await openpgp.key.readArmored(key.pub);
-                //
-                //         openkey = openkey.keys[0];
-                //         let fingerprint = openkey.primaryKey.fingerprint;
-                //         let fp = "";
-                //         fingerprint.forEach((n, i) => {
-                //             fp += n.toString(16);
-                //         });
-                //
-                //
-                //         str += `
-                //             <tr>
-                //                 <td>${(MY_CONTEXT.defaultKey && MY_CONTEXT.defaultKey == key.uuid || key.active ? "<span class='active'>Active</span>" : "")}</td>
-                //                 <td>${key.name}</td>
-                //                 <td>${key.owner}</td>
-                //                 <td class='mono'>${fp.toUpperCase()}</td>
-                //                 <td>${key.created}</td>
-                //             </tr>
-                //         `;
-                //
-                //         document.getElementById("key-management-body").innerHTML += str;
-                //
-                //
-                //     })();
-
-
-                    // let foundKeys =  (await openpgp.key.readArmored(key.pub)).keys;
-                    // console.log(foundKeys);
-                    //
-                    // if (!foundKeys || foundKeys.length !== 1) {
-                    //     throw new Error("Key not read, or more t
-                    //
-                    // var pubKey = foundKeys[0]; foundKeys = null;
-                    //
-                    // var getFingerprint = function (key) {
-                    //     // openpgp.key <- Class
-                    //     // key <- Instance received by params
-                    //     return key.primaryKey.fingerprint;
-                    // };
-                    //
-                    // var getKeyId = function (key) {
-                    //     return key.primaryKey.getKeyId().toHex();
-                    // }
-                    //
-                    // console.log(getFingerprint(pubKey));
-                    // console.log(getKeyId(pubKey));
-
-
-
 
 
 
@@ -401,11 +338,21 @@ PAGE_DATA = {
                 }
              },
              {
-                 id:"action-form-new-key-generate",
+                 id:"action-import-key",
                  func: ()=>{
+                     popupSetText(`
+                             <div class='segment popup-title'>Import Key</div>
 
-                 }
-             }
+                             <div class='segment'>NOT YET IMPLEMENTED</div>
+
+                             <div class='segment'><a id='popup-close' class='action'>Close</a></div>
+                         `);
+
+                     document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
+                     popupDisplay(true);
+                }
+             },
+
          ]
      }
 
