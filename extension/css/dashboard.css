@@ -181,6 +181,8 @@ body, html {
                 padding:10px;
                 min-width:400px;
                 min-height:300px;
+                max-width: 80vw;
+                overflow-wrap: anywhere;
             }
 
                 div.popup-container div.popup div.segment{
@@ -190,4 +192,13 @@ body, html {
                 div.popup-container div.popup div.segment.popup-title{
                     font-weight: bold;
                     text-transform: uppercase;
+                }
+
+                div.popup-container div.popup textarea.keychain {
+                    width: 60vw;
+                    height:60vh;
+                    padding:3px;
+                    margin-bottom:5px;
+                    border-radius: 5px;
+                    border:1px solid #a0a0a0;
                 }

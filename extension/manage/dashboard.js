@@ -135,7 +135,7 @@ PAGE_DATA = {
          <div>
              <a class='action' id='action-new-key'>Generate New Key</a>
              <a class='action' id='action-import-key'>Import Key</a>
-             <!--<a class='action' id='action-export-key'>Export Key</a>-->
+             <a class='action' id='action-export-key'>Export Keychain</a>
          </div>
 
          <div class='hidden form' id='form-new-key'>
@@ -347,6 +347,29 @@ PAGE_DATA = {
 
                              <div class='segment'><a id='popup-close' class='action'>Close</a></div>
                          `);
+
+                     document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
+                     popupDisplay(true);
+                }
+             },
+             {
+                 id:"action-export-key",
+                 func: ()=>{
+                     popupSetText(`
+                             <div class='segment popup-title'>Export Keychain</div>
+
+                             <textarea id='keychain-export' class='keychain'></textarea>
+
+                             <div class='segment'>
+                                <a id='popup-close' class='action'>Close</a>
+                                <a id='keychain-copy' class='action'>Copy to Clipboard</a>
+                             </div>
+                         `);
+
+                     keychainLoadFull((keys)=>{
+                         document.getElementById("keychain-export").innerHTML = JSON.stringify(keys,4);
+                         document.getElementById("keychain-copy").addEventListener("click", ()=>{ copyToClipboard(JSON.stringify(keys)); });
+                     });
 
                      document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
                      popupDisplay(true);
