@@ -403,6 +403,8 @@ PAGE_DATA = {
                      popupSetText(`
                              <div class='segment popup-title'>Import Key</div>
 
+                             <div class='segment'>NOT YET IMPLEMENTED</div>
+
                              <textarea id='keychain-import' class='keychain'></textarea>
 
                              <div class='segment' style='display:none;' id="import-error">Error parsing key import</div>
