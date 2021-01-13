@@ -42,11 +42,11 @@ function readPage() {
 
         if( recipientId != currentRecipient){
             if( recipientId.userFound && recipientId.isGroup == false && myId.meFound ){
-                keychainLoadKeysByOwner( recipientId.id, (keys)=>{
 
-                    let key = keys.find((k)=>{ return k.active == true; });
-                    if( key ){
-                        ACTIVE_RECIPIENT_KEY = key;
+                let requestGetActiveKey = {action:"GET_RECIPIENT_ACTIVE_KEY", recipient:recipientId.id};
+                chrome.runtime.sendMessage( requestGetActiveKey, function(res) {
+                    if( res && res.key ){
+                        ACTIVE_RECIPIENT_KEY = res.key;
                         document.getElementById("pgp-recipient-fingerprint").innerText = ACTIVE_RECIPIENT_KEY.fingerprint.toUpperCase();
                     } else {
                         ACTIVE_RECIPIENT_KEY = null;
@@ -228,18 +228,22 @@ readPage();
 setInterval(()=>{
     loadMyContext(()=>{
 
-        keychainLoadKey( "ME", MY_CONTEXT.defaultKey, (key)=>{
+        // Get my active key
+        let request = {action:"GET_MY_ACTIVE_KEY"};
+        chrome.runtime.sendMessage( request, function(res) {
 
-            MY_KEY = key;
+            if( res.key != null ){
+                MY_KEY = res.key;
 
-            // Load Key
-            getPubFingerprint(MY_KEY.pub, (fingerprint)=>{
-                let myfp = document.getElementById("pgp-my-fingerprint");
-                if( myfp && myfp.innerText != fingerprint ){
-                     myfp.innerText = fingerprint;
-                     MY_KEY_UUID = MY_CONTEXT.defaultKey;
-                }
-            });
+                // get key fingerprint
+                getPubFingerprint(MY_KEY.pub, (fingerprint)=>{
+                    let myfp = document.getElementById("pgp-my-fingerprint");
+                    if( myfp && myfp.innerText != fingerprint ){
+                         myfp.innerText = fingerprint;
+                         MY_KEY_UUID = MY_CONTEXT.defaultKey;
+                    }
+                });
+            }
 
         });
 

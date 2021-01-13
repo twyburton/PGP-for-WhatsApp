@@ -32,7 +32,6 @@ chrome.runtime.onInstalled.addListener(function(details){
 // IPC
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-      console.log(request);
 
     if( request.action == "GET_PASSPHRASE" ){
         let res = { passphrase:null };
@@ -84,9 +83,45 @@ chrome.runtime.onMessage.addListener(
             request.newKey.active = true;
             keychainSave( request.newKey, ()=>{
             });
+
+            sendResponse({success:true});
         });
 
+    } else if( request.action == "SET_ACTIVE_KEY" ){
+        // Set active key for me or recipient
+        keychainLoadKeysByOwner( request.key.owner, (keys)=>{
+            console.log(keys);
+            keys.forEach((key, i) => {
+                key.active = (request.key.uuid == key.uuid);
+                keychainSave( key, ()=>{
+                });
+            });
+            console.log(keys);
+
+            sendResponse({success:true});
+        });
+
+    } else if( request.action == "GET_MY_ACTIVE_KEY" ){
+
+        keychainLoadKeysByOwner( "ME", (keys)=>{
+            let key = keys.find((k)=>{ return k.active; })
+            sendResponse({key:key});
+        });
+
+    } else if( request.action == "GET_RECIPIENT_ACTIVE_KEY" ){
+
+        keychainLoadKeysByOwner( request.recipient, (keys)=>{
+            let key = keys.find((k)=>{ return k.active; })
+            sendResponse({key:key});
+        });
+    } else if( request.action == "DELETE_KEY" ){
+        let k = `keychain-${request.key.owner}-${request.key.uuid}`;
+        chrome.storage.sync.remove([k], function() {
+            sendResponse({deleted:true});
+        });
     }
+
+    return true;
 
 });
 

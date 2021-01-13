@@ -123,6 +123,15 @@ body, html {
                     border-radius: 2px;
                 }
 
+                .active.action {
+                    background:#0e90ff;
+                    cursor: pointer;
+                }
+
+                .active.action:hover {
+                    background:#0366bb;
+                }
+
                 .mono {
                     font-family: 'Overpass Mono', monospace;
                 }
@@ -187,6 +196,20 @@ body, html {
 
                 div.popup-container div.popup div.segment{
                     padding:1px 0;
+                }
+
+                div.popup-container div.popup div.segment.actions{
+                    display:flex;
+                }
+
+                    div.popup-container div.popup div.segment.actions a{
+                        margin-right:3px;
+                    }
+
+                div.popup-container div.popup div.segment.warning{
+                    border: 1px solid var(--red);
+                    padding: 5px;
+                    margin: 4px 0;
                 }
 
                 div.popup-container div.popup div.segment.popup-title{

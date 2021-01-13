@@ -163,12 +163,12 @@ PAGE_DATA = {
 
              // Populate Key list
              keychainLoadFull((keys)=>{
+                console.log(keys);
 
                 document.getElementById("key-management-body").innerHTML = "";
 
                 let owners = Array.from(new Set(keys.map((item) => item.owner)));
                 owners.sort((a,b)=>{return b-a;});
-                console.log(owners);
 
                 owners.forEach((owner, i) => {
                     let keysByOwner = keys.filter((k)=>{ return k.owner == owner; });
@@ -193,7 +193,7 @@ PAGE_DATA = {
                     keysByOwner.forEach((key, i) => {
                         str += `
                                     <tr>
-                                        <td>${(MY_CONTEXT.defaultKey && MY_CONTEXT.defaultKey == key.uuid || key.active ? "<span class='active'>Active</span>" : "")}</td>
+                                        <td>${( key.active ? "<span class='active'>Active</span>" : "")}</td>
                                         <td>${key.name}</td>
                                         <td class='mono' id='key-${key.uuid}-id'></td>
                                         <td class='mono' id='key-${key.uuid}-fingerprint'></td>
@@ -219,6 +219,7 @@ PAGE_DATA = {
                     let fingerprint = null;
                     let keyid = null;
 
+                    // Edit key event listener
                     document.getElementById(`key-${key.uuid}-action-edit`).addEventListener("click",()=>{
 
                         popupSetText(`
@@ -247,9 +248,25 @@ PAGE_DATA = {
                                         <td>Saved</td>
                                         <td>${key.saved}</td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>${(key.active? "<span class='active'>Active</span>" : "" )}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>${(!key.active? "<span class='active action' id='action-set-key-active'>Make Active Key</span> <span class='active action' id='action-key-delete'>Delete Key</span>":"")}</td>
+                                    </tr>
                                 </table>
 
-                                <div class='segment'><a id='popup-update-key' class='action'>Save</a> <a id='popup-close' class='action'>Close</a></div>
+                                <div class='segment warning' id='delete-warning' style='display:none'>
+                                    <div>Are you sure you wish to delete this key? Once deleted it cannot be undone unless you have a backup of your key or get your recipient to send another copy.</div>
+                                    <div class='segment actions'>
+                                        <a id='key-delete-yes' class='action'>Delete</a>
+                                        <a id='key-delete-no' class='action'>Cancel</a>
+                                    </div>
+                                </div>
+
+                                <div class='segment actions'><a id='popup-update-key' class='action'>Save</a> <a id='popup-close' class='action'>Close</a></div>
                             `);
 
                         document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
@@ -259,7 +276,48 @@ PAGE_DATA = {
                             popupDisplay(false);
                             selectPage("KEY_MANAGEMENT");
                         });
+
+                        let setActiveKeyButton = document.getElementById("action-set-key-active");
+                        if( setActiveKeyButton ){
+                            // Set active key
+                            setActiveKeyButton.addEventListener("click",()=>{
+                                let request = { action:"SET_ACTIVE_KEY", key:key };
+                                chrome.runtime.sendMessage( request, function(res) {
+                                    popupDisplay(false);
+                                    selectPage("KEY_MANAGEMENT");
+                                });
+                            });
+
+                            // Delete key
+                            document.getElementById("action-key-delete").addEventListener("click",()=>{
+                                document.getElementById("delete-warning").style.display = "block";
+
+                                // Cancel Delete
+                                document.getElementById("key-delete-no").addEventListener("click",()=>{
+                                    document.getElementById("delete-warning").style.display = "none";
+
+                                });
+
+                                // Confirm Delete
+                                document.getElementById("key-delete-yes").addEventListener("click",()=>{
+                                    document.getElementById("delete-warning").style.display = "none";
+
+                                    let request = { action:"DELETE_KEY", key:key };
+                                    chrome.runtime.sendMessage( request, function(res) {
+                                        popupDisplay(false);
+                                        selectPage("KEY_MANAGEMENT");
+                                    });
+
+                                });
+                            });
+
+
+
+
+                        }
+
                         popupDisplay(true);
+
                     });
 
                     getPubFingerprint( key.pub , (fp)=>{
@@ -323,13 +381,15 @@ PAGE_DATA = {
                                 }
 
                                 console.log(newKey);
-                                keychainSave( newKey, ()=>{
-                                    console.log("Saved New Key")
+
+                                let newKeyRequest = { action:"SAVE_NEW_KEY", newKey:newKey }
+                                chrome.runtime.sendMessage( newKeyRequest, function(res) {
+
+                                    MY_CONTEXT.defaultKey = newKey.uuid;
+                                    saveMyContext();
+
                                     selectPage("KEY_MANAGEMENT");
                                 });
-
-                                MY_CONTEXT.defaultKey = newKey.uuid;
-                                saveMyContext();
 
                             })();
                          }
@@ -343,12 +403,35 @@ PAGE_DATA = {
                      popupSetText(`
                              <div class='segment popup-title'>Import Key</div>
 
-                             <div class='segment'>NOT YET IMPLEMENTED</div>
+                             <textarea id='keychain-import' class='keychain'></textarea>
 
-                             <div class='segment'><a id='popup-close' class='action'>Close</a></div>
+                             <div class='segment' style='display:none;' id="import-error">Error parsing key import</div>
+
+                             <div class='segment'>
+                                <a id='popup-close' class='action'>Close</a>
+                                <a id='keychain-action-import' class='action'>Import Key or Keychain</a>
+                            </div>
                          `);
 
                      document.getElementById("popup-close").addEventListener("click",()=>{ popupDisplay(false); });
+                     document.getElementById("keychain-action-import").addEventListener("click", ()=>{
+                         document.getElementById("import-error").style.display = "none";
+                         let impor = document.getElementById("keychain-import").value;
+
+                         if( impor.startsWith("-----BEGIN PGP PUBLIC KEY BLOCK-----")) {
+
+                         } else if (impor.startsWith("-----BEGIN PGP PRIVATE KEY BLOCK-----")) {
+
+                         } else if ( impor.startsWith("[") && impor.endsWith("]") ){
+                             try {
+                                 let keysToImport = JSON.parse(impor);
+                             } catch (e) {
+                                 document.getElementById("import-error").style.display = "block";
+                             }
+                         } else {
+                             document.getElementById("import-error").style.display = "block";
+                         }
+                     });
                      popupDisplay(true);
                 }
              },
