@@ -1,0 +1,50 @@
+
+html, body {
+
+    margin:0;
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+    div.container {
+        background:var(--pgp-red);
+        border:3px solid var(--pgp-yellow);
+        padding:5px;
+
+        display:flex;
+        flex-direction: column;
+
+        width:250px;
+        text-align: center;
+
+        color:white;
+    }
+
+        div.body {
+            margin-bottom: 5px;
+        }
+
+            h1 {
+                font-weight: normal;
+                font-size:15px;
+            }
+
+            a.button {
+                cursor:pointer;
+                background:var(--pgp-yellow);
+                font-size: 12px;
+                padding: 5px 10px;
+                border-radius:3px;
+                color:black;
+                display:block;
+                text-decoration: none;
+            }
+
+            a.button:hover {
+                background:var(--pgp-yellow-dark);
+            }
+
+
+    div#version-number {
+        font-family: 'Overpass Mono', monospace;
+    }
